@@ -20,7 +20,6 @@ get_header(); ?>
         <div class="page-banner__intro">
             <!-- Nếu bạn muốn hiển thị thêm thông tin như ngày tháng, bạn có thể thêm vào đây -->
             <?php
-          
             ?>
         </div>
     </div>

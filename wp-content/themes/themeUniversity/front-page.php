@@ -19,39 +19,40 @@ get_header();
         <div class="full-width-split__inner">
             <h2 class="headline headline--small-plus t-center">Upcoming Events</h2>
             <?php
-            // Query các bài viết loại 'event'
             $homepageEvents = new WP_Query(array(
-                'posts_per_page' => 2,
+                'posts_per_page' => 3,
                 'post_type' => 'events',
                 'meta_key' => 'event_date',
-                'orderby' => 'meta_value_num',
+                'orderby' => 'meta_value',
                 'order' => 'ASC',
                 'meta_query' => array(
                     array(
-                        'key' => 'event_date', // Trường meta để so sánh là 'event_date'
-                        'value' => date('Y-m-d'), // Lấy giá trị là ngày hôm nay
-                        'compare' => '>=', // So sánh để lấy các sự kiện diễn ra từ hôm nay trở về sau
-                        'type' => 'DATE' // Đặt kiểu dữ liệu là DATE để so sánh đúng
+                        'key' => 'event_date',
+                        'value' => date('Y-m-d'),
+                        'compare' => '>=',
+                        'type' => 'DATE'
                     )
                 )
             ));
 
-            // Vòng lặp để hiển thị các sự kiện
             while ($homepageEvents->have_posts()) :
                 $homepageEvents->the_post();
 
-                // Lấy giá trị 'start_day' từ meta field
-                $start_day = get_post_meta(get_the_ID(), 'start_day', true);
-                $date_event = new DateTime($start_day);
+                $event_date = get_post_meta(get_the_ID(), 'event_date', true);
+                $date_event = new DateTime($event_date);
                 $month_event = $date_event->format('M');
                 $day_event = $date_event->format('d');
             ?>
+               
                 <div class="event-summary">
-                    <a class="event-summary__date t-center" href="<?php echo get_the_permalink(); ?>">
+                <p class=""><?php echo esc_html(date('d/m/Y', strtotime($event_date))); ?></p>
+                    <a class="event-summary__date t-center" href="<?php echo esc_url(get_the_permalink()); ?>">
                         <span class="event-summary__month"><?php echo esc_html($month_event); ?> </span>
                         <span class="event-summary__day"><?php echo esc_html($day_event); ?></span>
+                       
                     </a>
                     <div class="event-summary__content">
+                   
                         <h5 class="event-summary__title headline headline--tiny">
                             <a href="<?php echo esc_url(get_the_permalink()); ?>"><?php echo esc_html(get_the_title()); ?></a>
                         </h5>
@@ -65,17 +66,19 @@ get_header();
                             <a href="<?php echo esc_url(get_the_permalink()); ?>" class="nu gray">Learn more</a>
                         </p>
                     </div>
+                  
                 </div>
             <?php endwhile; ?>
+          
 
-            <?php wp_reset_postdata(); // Đặt lại dữ liệu bài viết sau khi vòng lặp 
-            ?>
+            <?php wp_reset_postdata(); ?>
 
             <p class="t-center no-margin">
-                <a href="<?php echo get_post_type_archive_link('event'); ?>" class="btn btn--blue">View All Events</a>
+                <a href="<?php echo esc_url(get_post_type_archive_link('events')); ?>" class="btn btn--blue">View All Events</a>
             </p>
         </div>
     </div>
+
 
 
     <div class="full-width-split__two">
@@ -85,10 +88,10 @@ get_header();
             <?php
             // Query to get recent blogs
             $blogPosts = new WP_Query(array(
-                'posts_per_page' => 2,
+                'posts_per_page' => 3,
                 'post_type' => 'blog',
                 'orderby' => 'meta_value_num',
-                'order' => 'ASC'
+                'order' => 'DESC'
 
             ));
 
@@ -97,8 +100,8 @@ get_header();
             ?>
                 <div class="event-summary">
                     <a class="event-summary__date t-center" href="<?php echo get_the_permalink(); ?>">
-                        <span class="event-summary__month"><?php echo esc_html($month_event); ?> </span>
-                        <span class="event-summary__day"><?php echo esc_html($day_event); ?></span>
+                    <span class="event-summary__month"><?php echo esc_html(date('M', strtotime(get_the_date()))); ?></span>
+                    <span class="event-summary__day"><?php echo esc_html(date('j', strtotime(get_the_date()))); ?></span>
                     </a>
                     <div class="event-summary__content">
                         <h5 class="event-summary__title headline headline--tiny">

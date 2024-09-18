@@ -9,6 +9,7 @@ get_header();
         <h1 class="page-banner__title">Welcome to our blog!</h1>
         <div class="page-banner__intro">
             <p>Keep up with our latest news.</p>
+            <a href="<?php echo esc_url(home_url('/events')); ?>" class="button button--events">Quay lại trang sự kiện</a>
         </div>
     </div>
 </div>
